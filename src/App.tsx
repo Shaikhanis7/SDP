@@ -1,27 +1,45 @@
-import { useState } from 'react'
-import './assets/css/style.css'
-import './App.css'
-import { Button } from './components/ui/button'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import HomeLayout from './layout/HomeLayout'
+
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Shared/Home'
-import { ThemeProvider } from './components/ui/theme-provider'
 
 
-function App() {
-  return (
-    <>
-    {/* <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme"> */}
-       <BrowserRouter>
-       <Routes>
-        <Route element={<HomeLayout/>}>
-        <Route path="/" element={<Home/>}/>
-</Route>
-       </Routes>
-       </BrowserRouter>
-       {/* </ThemeProvider> */}
-    </>
-  )
+
+import AdminLayout from './layout/AdminLayout'
+import HomeLayout from './layout/HomeLayout'
+import Login from './pages/Shared/Login'
+
+
+
+
+
+const App = () => {
+    return (
+        <>
+            <BrowserRouter>
+                <Routes>
+                    <Route element={<HomeLayout />}>
+                        <Route path='/' element={<Home />} />
+                        <Route path='/login' element={<Login />} />
+                        {/* <Route path='/register' element={<Register />} /> */} 
+                    </Route>
+
+                    {/* <Route element={<UserLayout />}>
+                        <Route path='/dashboard' element={<UserDashboard />} />
+                    </Route> */}
+
+                    {/* <Route element={<AdminLayout />}>
+                        <Route path='/admin/dashboard' element={<AdminDashboard />} />
+                        <Route path='/admin/users' element={<AdminUsers />} />
+                    </Route> */}
+
+                    {/* <Route path='*' element={<NotFound />} /> */}
+                </Routes>
+            </BrowserRouter>
+
+
+        </>
+    )
 }
 
 export default App

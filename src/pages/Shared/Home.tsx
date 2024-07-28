@@ -1,5 +1,6 @@
 import { CardWithForm } from '@/components/Altered/CardWithForm';
 import { FeaturedCompaniesSection } from '@/components/Altered/FeaturedCompaniesSection';
+import { MainComponent } from '@/components/Altered/MainComponent';
 import { ParentCard } from '@/components/Altered/ParentCard';
 // import { ParentCard } from '@/components/Altered/ParentCard';
 import BlurFade from '@/components/magicui/blur-fade';
@@ -139,13 +140,14 @@ export default function Home() {
       {/* </div> */}
 
 
-      <div className='flex justify-center items-center flex-row w-screen'>
+      <div className='flex justify-center items-center flex-row'>
            
            <ParentCard/>
       </div>
     <div>
     <FeaturedCompaniesSection/>
     </div>
+    {/* <MainComponent/> */}
     </div>
 
   );

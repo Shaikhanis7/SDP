@@ -1,4 +1,3 @@
-// FeaturedCompaniesSection.tsx
 import * as React from "react";
 import { FeaturedCompanyCard } from "./FeaturedCompanyCard";
 import { Companies, Category } from "./types"; // Import the types
@@ -73,8 +72,9 @@ export function FeaturedCompaniesSection() {
   const [selectedFilter, setSelectedFilter] = React.useState<Category>("All");
 
   return (
-    <div className="p-6 bg-primary ">
-      <div className="mb-6 flex gap-4rounded">
+    <div className="p-6 bg-primary w-screen box-border overflow-x-hidden">
+      {/* Filter Buttons */}
+      <div className="mb-6 flex gap-4 justify-center">
         <button
           onClick={() => setSelectedFilter("All")}
           className={`px-4 py-2 rounded-lg ${selectedFilter === "All" ? "bg-primary-foreground text-primary" : "bg-primary text-primary-foreground"}`}
@@ -94,17 +94,23 @@ export function FeaturedCompaniesSection() {
           BFSI
         </button>
       </div>
+      
+      {/* Companies List */}
       <div className="flex flex-wrap gap-4 justify-center">
-        {companies[selectedFilter].map((company, index) => (
-          <FeaturedCompanyCard
-            key={index}
-            image={company.image}
-            companyName={company.companyName}
-            rating={company.rating}
-            reviews={company.reviews}
-            description={company.description}
-          />
-        ))}
+        {companies[selectedFilter].length > 0 ? (
+          companies[selectedFilter].map((company, index) => (
+            <FeaturedCompanyCard
+              key={index}
+              image={company.image}
+              companyName={company.companyName}
+              rating={company.rating}
+              reviews={company.reviews}
+              description={company.description}
+            />
+          ))
+        ) : (
+          <p className="text-center text-primary-foreground">No companies found</p>
+        )}
       </div>
     </div>
   );
