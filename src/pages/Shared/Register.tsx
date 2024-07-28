@@ -2,14 +2,14 @@ import React from "react";
 
 const Register: React.FC = () => {
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 flex items-center justify-center min-h-screen">
-      <div className="flex bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl">
+    <section className="bg-gray-50 dark:bg-gray-900 flex items-center justify-center h-[84vh]">
+      <div className="flex bg-primary-foreground rounded-lg shadow-lg overflow-hidden max-w-5xl">
         {/* Left side with image */}
-        <div className="hidden md:flex items-center justify-center w-1/2 bg-gray-100 dark:bg-gray-800 p-4">
+        <div className="hidden md:flex items-center justify-center w-1/2 bg-primary p-4">
           <img
-            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png"
+            src="https://png.pngtree.com/png-clipart/20190816/ourmid/pngtree-purple-office-ui-registration-illustration-png-image_1691877.jpg"
             alt="Phone Mockup"
-            className="object-contain max-h-96"
+            className="object-contain max-h-100"
           />
         </div>
         {/* Right side with form */}

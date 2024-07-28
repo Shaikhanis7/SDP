@@ -1,32 +1,35 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Briefcase, FileText, Users, Power } from 'lucide-react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { User, Briefcase, ClipboardList, Power, Home } from 'lucide-react'; // Added Home icon
 import { Button } from '../ui/button';
 
 const Leftbar: React.FC = () => {
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
-    const AdminLinks = [
+    const UserLinks = [
         {
             title: 'Dashboard',
-            link: '/admin/dashboard',
-            icon: LayoutDashboard
+            link: '/user/dashboard',
+            icon: Home,
         },
         {
-            title: 'Job Postings',
-            link: '/admin/job-postings',
-            icon: Briefcase
+            title: 'Profile',
+            link: '/user/profile',
+            icon: User,
         },
         {
-            title: 'Applications',
-            link: '/admin/applications',
-            icon: FileText
+            title: 'Job Listings',
+            link: '/user/job-listings',
+            icon: Briefcase,
         },
-        {
-            title: 'Users',
-            link: '/admin/users',
-            icon: Users
-        }
     ];
+
+    const handleLogout = () => {
+        // Handle logout logic here if necessary
+        // e.g., clear user data, token, etc.
+
+        navigate('/'); // Navigate to the home page
+    };
 
     return (
         <div className='h-screen w-1/6 flex flex-col shadow-sm shadow-primary pt-10'>
@@ -34,12 +37,11 @@ const Leftbar: React.FC = () => {
                 JobPortal
             </div>
             <div className='h-[90%] w-full flex flex-col justify-start items-center gap-2'>
-                {AdminLinks.map((data, index) => (
+                {UserLinks.map((data, index) => (
                     <NavLink
                         key={index}
                         to={data.link}
                         className='p-5 bg-primary/5 hover:bg-primary/10 font-bold mt-2 w-full flex flex-row items-center gap-2'
-                        
                     >
                         {React.createElement(data.icon, { size: 20 })}
                         {data.title}
@@ -47,7 +49,10 @@ const Leftbar: React.FC = () => {
                 ))}
             </div>
             <div className='h-[5%] w-full flex flex-col justify-center items-center'>
-                <Button className='p-5 bg-red-500/5 hover:bg-red-500/10 font-bold w-full'>
+                <Button 
+                    className='p-5 bg-red-500/5 hover:bg-red-500/10 font-bold w-full'
+                    onClick={handleLogout} // Attach handleLogout function
+                >
                     <span className='flex flex-row items-center justify-start h-full w-full gap-2 text-red-500'>
                         <Power size={20} /> Logout
                     </span>

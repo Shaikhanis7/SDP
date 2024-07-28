@@ -148,6 +148,63 @@ export default function Home() {
     <FeaturedCompaniesSection/>
     </div>
     {/* <MainComponent/> */}
+    <div className="w-full bg-primary py-16">
+        <BlurFade delay={0.25} inView>
+          <div className="max-w-screen-xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-primary-foreground mb-6">What Our Users Say</h2>
+            <div className="flex flex-wrap justify-center gap-6">
+              {/* Add testimonial cards here */}
+              
+              <div className="bg-primary-foreground shadow-lg rounded-lg p-6 max-w-xs">
+                <p className="text-primary mb-4">
+                  "This platform helped me find my dream job! The process was easy and the support team was very helpful."
+                </p>
+                <p className="text-primary font-semibold">- John Doe, Software Engineer</p>
+              </div>
+              
+              <div className="bg-primary-foreground shadow-lg rounded-lg p-6 max-w-xs">
+                <p className="text-primary mb-4">
+                  "This platform helped me find my dream job! The process was easy and the support team was very helpful."
+                </p>
+                <p className="text-primary font-semibold">- John Doe, Software Engineer</p>
+              </div>
+              
+              <div className="bg-primary-foreground shadow-lg rounded-lg p-6 max-w-xs">
+                <p className="text-primary mb-4">
+                  "This platform helped me find my dream job! The process was easy and the support team was very helpful."
+                </p>
+                <p className="text-primary font-semibold">- John Doe, Software Engineer</p>
+              </div>
+             
+             
+            </div>
+          </div>
+        </BlurFade>
+      </div>
+
+      {/* Newsletter Subscription */}
+      <div className="w-full bg-primary-foreground py-16">
+        <BlurFade delay={0.25} inView>
+          <div className="max-w-screen-xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-primary mb-6">Stay Updated</h2>
+            <p className="text-primary mb-8">
+              Subscribe to our newsletter to get the latest job opportunities and career advice delivered straight to your inbox.
+            </p>
+            <div className="max-w-lg mx-auto">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 py-3 px-4 text-primary-foreground placeholder-primary-foreground rounded-lg border border-primary-foreground/20 shadow-sm focus:outline-none focus:ring-2 focus:ring-accent bg-primary"
+                />
+                <button className="bg-accent text-white font-bold py-3 px-8 rounded-lg shadow-lg transition duration-300">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+        </BlurFade>
+      </div>
     </div>
 
   );
