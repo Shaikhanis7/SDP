@@ -1,62 +1,65 @@
 import React, { useState } from 'react';
 
 interface JobApplicationProps {
-    onSubmit: (applicationData: {
-        name: string;
-        email: string;
-        resume: File | null;
-    }) => void;
+    jobTitle: string;
+    onSubmit: (data: { name: string; email: string; resume: File | null }) => void;
 }
 
-const JobApplication: React.FC<JobApplicationProps> = ({ onSubmit }) => {
+const JobApplication: React.FC<JobApplicationProps> = ({ jobTitle, onSubmit }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [resume, setResume] = useState<File | null>(null);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         onSubmit({ name, email, resume });
-        setName('');
-        setEmail('');
-        setResume(null);
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <h2 className="text-2xl font-bold mb-4 dark:text-white">Apply for this Job</h2>
-            <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2 dark:text-gray-300">Name</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary dark:focus:border-primary-light"
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2 dark:text-gray-300">Email</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary dark:focus:border-primary-light"
-                />
-            </div>
-            <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2 dark:text-gray-300">Resume</label>
-                <input
-                    type="file"
-                    onChange={(e) => setResume(e.target.files ? e.target.files[0] : null)}
-                    className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary dark:focus:border-primary-light"
-                />
-            </div>
-            <div className="flex justify-end">
-                <button
-                    onClick={handleSubmit}
-                    className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary-hover dark:bg-primary-light dark:text-primary-light-foreground dark:hover:bg-primary-light-hover"
-                >
-                    Submit Application
-                </button>
-            </div>
+        <div>
+            <h2 className="text-xl font-semibold mb-4">Apply for {jobTitle}</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="name">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700" htmlFor="resume">Resume</label>
+                    <input
+                        type="file"
+                        id="resume"
+                        onChange={(e) => setResume(e.target.files ? e.target.files[0] : null)}
+                        className="mt-1 block w-full text-sm text-gray-500 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+                        required
+                    />
+                </div>
+                <div className="flex justify-end">
+                    <button
+                        type="submit"
+                        className="bg-primary text-white px-4 py-2 rounded shadow hover:bg-primary-dark"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

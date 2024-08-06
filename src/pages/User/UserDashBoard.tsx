@@ -3,8 +3,8 @@ import { Briefcase, User, ClipboardList, Edit2, Trash2 } from 'lucide-react';
 
 const UserDashboard: React.FC = () => {
     const [user, setUser] = useState({
-        name: 'John Doe',
-        email: 'john@example.com',
+        name: 'Shaikh Anis S',
+        email: 'shaikh@example.com',
         profilePicture: 'https://example.com/profile.jpg',
     });
 

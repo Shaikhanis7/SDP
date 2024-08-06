@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
-import { Search, X, PlusCircle } from 'lucide-react';
+import { Search, X, Edit, Trash2, PlusCircle } from 'lucide-react';
+import { Button } from '../../components/ui/button';
+import {
+    Table,
+    TableCaption,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from '../../components/ui/table';
 
 const UserManagement: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [users, setUsers] = useState([
-        { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-        { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-        { id: 3, name: 'Alice Johnson', email: 'alice@example.com', role: 'User' },
+        { id: 1, name: 'Rajesh Kumar', email: 'rajesh@example.com', role: 'Admin' },
+        { id: 2, name: 'Sita Patel', email: 'sita@example.com', role: 'User' },
+        { id: 3, name: 'Amit Sharma', email: 'amit@example.com', role: 'User' },
     ]);
     const [showModal, setShowModal] = useState(false);
     const [editUser, setEditUser] = useState<any>(null);
@@ -54,77 +64,86 @@ const UserManagement: React.FC = () => {
 
     return (
         <div className='p-6'>
-            <div className='flex items-center justify-between'>
-                <div className='flex items-center gap-2'>
-                    <h1 className='text-2xl font-bold text-primary'>User Management</h1>
-                </div>
-                <button onClick={handleAddNewUser} className='flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded'>
-                    <PlusCircle size={20} /> Add New User
-                </button>
+            <div className='flex items-center justify-between mb-4'>
+                <h1 className='text-2xl font-bold text-primary'>User Management</h1>
+                <Button onClick={handleAddNewUser} className='bg-primary text-primary-foreground flex items-center gap-2'>
+                    <PlusCircle size={20} />
+                    Add New User
+                </Button>
             </div>
-            <div className='mt-4 flex justify-between items-center'>
-                <div className='relative w-full'>
-                    <input
-                        type='text'
-                        placeholder='Search users...'
-                        value={searchTerm}
-                        onChange={handleSearch}
-                        className='pl-10 pr-4 py-2 border border-gray-300 rounded w-full'
-                    />
-                    <Search className='absolute left-2 top-2.5 text-gray-400' size={20} />
-                </div>
+
+            <div className='mb-4 flex items-center relative'>
+                <input
+                    type='text'
+                    placeholder='Search users...'
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className='pl-10 pr-4 py-2 border border-gray-300 rounded w-full'
+                />
+                <Search className='absolute left-2 top-2.5 text-gray-400' size={20} />
             </div>
+
             <div className='mt-4'>
-                <table className='w-full border-collapse'>
-                    <thead>
-                        <tr className='border-b'>
-                            <th className='py-2 text-left text-primary'>Name</th>
-                            <th className='py-2 text-left text-primary'>Email</th>
-                            <th className='py-2 text-left text-primary'>Role</th>
-                            <th className='py-2 text-left text-primary'>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredUsers.map(user => (
-                            <tr key={user.id} className='border-b'>
-                                <td className='py-2 text-primary'>{user.name}</td>
-                                <td className='py-2 text-primary'>{user.email}</td>
-                                <td className='py-2 text-primary'>{user.role}</td>
-                                <td className='py-2'>
-                                    <button
-                                        onClick={() => handleEditUser(user)}
-                                        className='text-blue-500 hover:underline'
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteUser(user.id)}
-                                        className='text-red-500 hover:underline ml-2'
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {filteredUsers.length === 0 && (
-                    <div className='text-center text-gray-500'>No users found.</div>
-                )}
+                <Table>
+                    <TableCaption>A list of users in the system.</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredUsers.length > 0 ? (
+                            filteredUsers.map(user => (
+                                <TableRow key={user.id}>
+                                    <TableCell>{user.name}</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>{user.role}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button
+                                            variant='outline'
+                                            className='mr-2'
+                                            onClick={() => handleEditUser(user)}
+                                        >
+                                            <Edit size={16} className='mr-1' />
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant='outline'
+                                            color='danger'
+                                            onClick={() => handleDeleteUser(user.id)}
+                                        >
+                                            <Trash2 size={16} className='mr-1' />
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={4} className='text-center text-gray-500'>
+                                    No users found.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
             </div>
 
             {showModal && (
                 <div className='fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center'>
-                    <div className='bg-white p-6 rounded shadow-lg w-[90%] max-w-md'>
+                    <div className='bg-primary p-6 rounded shadow-lg w-[90%] max-w-md'>
                         <div className='flex justify-between items-center mb-4'>
-                            <h2 className='text-lg font-bold text-primary'>
+                            <h2 className='text-lg font-bold text-primary-foreground'>
                                 {editUser ? 'Edit User' : 'Add New User'}
                             </h2>
-                            <button onClick={() => setShowModal(false)}><X size={20} className="text-primary" /></button>
+                            <button onClick={() => setShowModal(false)}><X size={20} className="text-primary-foreground" /></button>
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className='mb-4'>
-                                <label className='block text-sm font-bold mb-2 text-primary' htmlFor='name'>Name</label>
+                                <label className='block text-sm font-bold mb-2 text-primary-foreground' htmlFor='name'>Name</label>
                                 <input
                                     type='text'
                                     id='name'
@@ -135,7 +154,7 @@ const UserManagement: React.FC = () => {
                                 />
                             </div>
                             <div className='mb-4'>
-                                <label className='block text-sm font-bold mb-2 text-primary' htmlFor='email'>Email</label>
+                                <label className='block text-sm font-bold mb-2 text-primary-foreground' htmlFor='email'>Email</label>
                                 <input
                                     type='email'
                                     id='email'
@@ -146,7 +165,7 @@ const UserManagement: React.FC = () => {
                                 />
                             </div>
                             <div className='mb-4'>
-                                <label className='block text-sm font-bold mb-2 text-primary' htmlFor='role'>Role</label>
+                                <label className='block text-sm font-bold mb-2 text-primary-foreground' htmlFor='role'>Role</label>
                                 <select
                                     id='role'
                                     name='role'
@@ -158,9 +177,9 @@ const UserManagement: React.FC = () => {
                                 </select>
                             </div>
                             <div className='flex justify-end'>
-                                <button type='submit' className='bg-primary text-primary-foreground px-4 py-2 rounded'>
+                                <Button type='submit' className='text-primary bg-primary-foreground px-4 py-2 rounded'>
                                     {editUser ? 'Update' : 'Add'} User
-                                </button>
+                                </Button>
                             </div>
                         </form>
                     </div>

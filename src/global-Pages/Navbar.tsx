@@ -3,63 +3,64 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store'; // Adjust path according to your structure
 import { ModeToggle } from '../components/ui/mode-toggle';
-import { FaBriefcase } from 'react-icons/fa'; // Import the briefcase icon
+import { FaBriefcase } from 'react-icons/fa';
 import { BorderBeam } from '../components/magicui/border-beam';
 
 const Navbar: React.FC = () => {
   const { username, password } = useSelector((state: RootState) => state.auth);
 
-  // Determine the state of navigation links based on credentials
   const renderNavLinks = () => {
     if (username === 'admin' && password === '2647') {
-      // Admin user
-      return (
-        <li className='list-none'>
-          <NavLink
-            to="/admin/dashboard"
-            className="text-primary-foreground text-md font-semibold hover:text-accent-foreground transition-colors duration-300"
-          >
-            Admin Dashboard
-          </NavLink>
-
-          <NavLink to='/'
-           className="ml-3 text-primary-foreground text-md font-semibold hover:text-accent-foreground transition-colors duration-300">
-              Back
-          </NavLink>
-        </li>
-      );
-    } else if (username && password) {
-      // Logged in user
       return (
         <>
-          <li className='list-none'>
+          <li className="list-none">
+            <NavLink
+              to="/admin/dashboard"
+              className="text-md font-semibold px-3 py-2 transition-all rounded-lg hover:text-primary hover:bg-primary-foreground text-muted-foreground"
+            >
+              Admin Dashboard
+            </NavLink>
+          </li>
+          <li className="list-none">
+            <NavLink
+              to="/"
+              className="ml-3 text-md font-semibold px-3 py-2 transition-all rounded-lg hover:text-primary hover:bg-primary-foreground text-muted-foreground"
+            >
+              Back
+            </NavLink>
+          </li>
+        </>
+      );
+    } else if (username && password) {
+      return (
+        <>
+          <li className="list-none">
             <NavLink
               to="/profile"
-              className="text-primary-foreground text-md font-semibold hover:text-accent-foreground transition-colors duration-300"
+              className="text-md font-semibold px-3 py-2 transition-all rounded-lg hover:text-primary hover:bg-primary-foreground text-muted-foreground"
             >
               Profile
             </NavLink>
           </li>
-          <li className='list-none'>
+          <li className="list-none">
             <NavLink
               to="/services"
-              className="text-primary-foreground text-md font-semibold hover:text-accent-foreground transition-colors duration-300"
+              className="text-md font-semibold px-3 py-2 transition-all rounded-lg hover:text-primary hover:bg-primary-foreground text-muted-foreground"
             >
               Services
             </NavLink>
           </li>
-          <li className='list-none'>
+          <li className="list-none">
             <NavLink
               to="/user/dashboard"
-              className="text-primary-foreground text-md font-semibold hover:text-accent-foreground transition-colors duration-300"
+              className="text-md font-semibold px-3 py-2 transition-all rounded-lg hover:text-primary hover:bg-primary-foreground text-muted-foreground"
             >
-              UserDashBoard
+              User Dashboard
             </NavLink>
           </li>
         </>
       );
     } else {
-      // Guest user
       return (
         <>
           {[
@@ -68,10 +69,10 @@ const Navbar: React.FC = () => {
             { title: 'Register', path: '/register' },
             { title: 'Services', path: '/services' }
           ].map((link, index) => (
-            <li key={index} className='list-none'>
+            <li key={index} className="list-none">
               <NavLink
                 to={link.path}
-                className="text-primary-foreground text-md font-semibold hover:text-accent-foreground transition-colors duration-300"
+                className="text-md font-semibold px-3 py-2 transition-all rounded-lg hover:text-primary hover:bg-primary-foreground text-muted-foreground"
               >
                 {link.title}
               </NavLink>
@@ -83,20 +84,23 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-[8vh] flex flex-row justify-between items-center bg-primary shadow-sm px-4 sticky top-0 z-10">
-      <BorderBeam className='h-[8vh]' />
-      <div className="w-1/4 h-full flex items-center gap-2">
-        {/* JobIn Text */}
-        <div className="text-3xl font-bold text-primary-foreground font-poppins">
-          JobIn
+    <div className="w-full h-[8vh] flex items-center bg-muted/40 shadow-sm shadow-primary px-4 sticky top-0 z-10 border-b border-primary-foreground">
+      <BorderBeam className="h-[8vh]" />
+      <div className="w-full flex flex-row items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="text-3xl font-bold text-primary first-letter:font-poppins">
+            JobIn
+          </div>
         </div>
-      </div>
-      <div className="w-2/4 h-full flex flex-row justify-end items-center gap-8">
-        <NavLink to="/jobs">
-          <FaBriefcase className="text-primary-foreground text-xl cursor-pointer hover:text-accent-foreground transition-colors duration-300" />
-        </NavLink>
-        {renderNavLinks()}
-        <ModeToggle />
+        <div className="w-full lg:w-auto flex flex-row justify-end items-center gap-8">
+          <NavLink to="/jobs" className="text-primary text-xl hover:text-accent-foreground transition-colors duration-300">
+            <FaBriefcase />
+          </NavLink>
+          <ul className="flex items-center gap-8">
+            {renderNavLinks()}
+          </ul>
+          <ModeToggle />
+        </div>
       </div>
     </div>
   );

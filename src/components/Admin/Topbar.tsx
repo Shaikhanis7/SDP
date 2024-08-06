@@ -1,25 +1,29 @@
 import React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Bell, Search, User } from 'lucide-react';
 import { ModeToggle } from '../ui/mode-toggle';
-import { Bell, Search } from 'lucide-react';
 
 const Topbar: React.FC = () => {
     return (
-        <div className='h-[6vh] w-full flex justify-between items-center shadow-sm shadow-primary px-6'>
-           
-            <div className='flex items-center w-1/2'>
-               
+        <div className='h-[6vh] w-full flex justify-between items-center bg-gray-900 text-white shadow-md px-6 py-2'>
+            {/* Logo and Search */}
+            <div className='flex items-center w-1/2 gap-4'>
+                <h1 className='text-xl font-bold'>JobPortal</h1>
+                
             </div>
+
+            {/* Actions */}
             <div className='flex items-center gap-4'>
-                <button className='relative'>
-                    <Bell className='text-gray-600' size={24} />
-                    <span className='absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full'></span>
+                {/* Notifications */}
+                <button className='relative flex items-center'>
+                    <Bell className='text-white' size={24} />
+                    <span className='absolute top-0 right-0 w-3 h-3 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>3</span>
+                    <span className='sr-only'>Notifications</span>
                 </button>
+                
+                {/* Dark Mode Toggle */}
                 <ModeToggle />
-                <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>U</AvatarFallback>
-                </Avatar>
+
+               
             </div>
         </div>
     );

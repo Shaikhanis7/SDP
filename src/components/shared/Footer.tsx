@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Logo and Description */}
           <div className="w-full sm:w-1/3 text-center sm:text-left mb-6 sm:mb-0">
             <a href="/" className="text-3xl font-bold text-primary-foreground">
-              JobFinder
+              JobIn
             </a>
             <p className="mt-4 text-primary-foreground">
               Connecting talent with opportunity. Your next career move starts here.

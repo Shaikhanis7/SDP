@@ -1,4 +1,5 @@
 
+import AdminDashboard from '@/components/Admin/AdminDashboard'
 import Leftbar from '@/components/Admin/Leftbar'
 import Topbar from '@/components/Admin/Topbar'
 import React from 'react'
@@ -11,6 +12,7 @@ const AdminLayout = () => {
       <div className='h-screen w-5/6 flex justify-center items-center flex-col'>
         <Topbar />
         <div className='h-[92vh] w-full'>
+          {/* <AdminDashboard/> */}
         <Outlet />
         </div>
       </div>

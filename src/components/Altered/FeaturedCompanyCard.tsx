@@ -29,7 +29,7 @@ export const FeaturedCompanyCard: React.FC<FeaturedCompanyCardProps> = ({
         </div>
       </div>
       <p className="text-primary/70 mb-4">{description}</p>
-      <button className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded-lg w-full">
+      <button className="bg-accent hover:bg-accent/90 text-primary font-bold py-2 px-4 rounded-lg w-full">
         View Jobs
       </button>
     </div>

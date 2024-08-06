@@ -19,13 +19,13 @@ export function ModeToggle() {
     //   variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="relative flex items-center justify-center rounded-3xl"
+      className="relative flex items-center justify-center bg-primary-foreground text-primary hover:bg-primary hover:text-primary-foreground"
     >
       {/* Display the Sun icon if the current theme is light, otherwise display the Moon icon */}
       {theme === "light" ? (
-        <Sun className="h-[1.2rem] w-[1.2rem]" />
-      ) : (
         <Moon className="h-[1.2rem] w-[1.2rem]" />
+      ) : (
+        <Sun className="h-[1.2rem] w-[1.2rem]" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

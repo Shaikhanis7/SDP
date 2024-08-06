@@ -21,7 +21,7 @@ const Navbar = () => {
           JobIn
         </div>
       </div>
-      <div className="w-2/4 h-full flex flex-row justify-end items-center gap-8">
+      <div className="w-2/4 h-full flex flex-row justify-center items-center gap-8">
         <NavLink to="/jobs"><FaBriefcase className="text-primary text-xl cursor-pointer hover:text-accent-foreground transition-colors duration-300" /></NavLink>
         {
           NavLinks.map((link, index) => (

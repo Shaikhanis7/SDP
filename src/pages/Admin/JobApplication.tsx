@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, Edit, Trash2 } from 'lucide-react';
+import {
+    Table,
+    TableCaption,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from '../../components/ui/table';
+import { Button } from '../../components/ui/button';
 
 const JobApplication: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -65,42 +75,52 @@ const JobApplication: React.FC = () => {
                 </div>
             </div>
             <div className='mt-4'>
-                <table className='w-full border-collapse'>
-                    <thead>
-                        <tr className='border-b'>
-                            <th className='py-2 text-left text-primary'>Applicant</th>
-                            <th className='py-2 text-left text-primary'>Position</th>
-                            <th className='py-2 text-left text-primary'>Status</th>
-                            <th className='py-2 text-left text-primary'>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredApplications.map(app => (
-                            <tr key={app.id} className='border-b'>
-                                <td className='py-2 text-primary'>{app.applicant}</td>
-                                <td className='py-2 text-primary'>{app.position}</td>
-                                <td className='py-2 text-primary'>{app.status}</td>
-                                <td className='py-2'>
-                                    <button
-                                        onClick={() => handleEditApplication(app)}
-                                        className='text-blue-500 hover:underline'
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteApplication(app.id)}
-                                        className='text-red-500 hover:underline ml-2'
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                {filteredApplications.length === 0 && (
-                    <div className='text-center text-gray-500'>No applications found.</div>
-                )}
+                <Table>
+                    <TableCaption>A list of job applications.</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Applicant</TableHead>
+                            <TableHead>Position</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredApplications.length > 0 ? (
+                            filteredApplications.map(app => (
+                                <TableRow key={app.id}>
+                                    <TableCell>{app.applicant}</TableCell>
+                                    <TableCell>{app.position}</TableCell>
+                                    <TableCell>{app.status}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button
+                                            variant='outline'
+                                            className='mr-2'
+                                            onClick={() => handleEditApplication(app)}
+                                        >
+                                            <Edit size={16} className='mr-1' />
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant='outline'
+                                            color='danger'
+                                            onClick={() => handleDeleteApplication(app.id)}
+                                        >
+                                            <Trash2 size={16} className='mr-1' />
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={4} className='text-center text-gray-500'>
+                                    No applications found.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
             </div>
 
             {showModal && (

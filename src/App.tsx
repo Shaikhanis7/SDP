@@ -20,10 +20,10 @@ import JobListing from './components/User/JobListing'
 import JobBoard from './components/User/JobBoard'
 import JobApplication from './pages/Admin/JobApplication'
 import Jobs from './pages/jobs/Jobs'
-import Services from './pages/services/Services'
 import ServicesPage from './components/services/ServicesPage'
 import NotFound from './pages/Shared/NotFound'
 import Login from './global-Pages/Login'
+import Settings from './pages/Admin/Settings'
 
 
 
@@ -49,6 +49,7 @@ const App = () => {
                         <Route path='/admin/job-postings' element={<JobPostings />} />
                         <Route path='/admin/applications' element={<JobApplications />} />
                         <Route path='/admin/users' element={<UserManagement />} />
+                        <Route path='/admin/settings' element={<Settings />} />
                     </Route>
 
                     <Route element={<UserLayout />}>

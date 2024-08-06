@@ -1,127 +1,93 @@
 import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '../ui/input';
+import { FileText, PlusCircle, X } from 'lucide-react';
 
 const Profile: React.FC = () => {
-    const [editing, setEditing] = useState(false);
-    const [userData, setUserData] = useState({
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '123-456-7890',
-        address: '123 Main St, Anytown, USA',
-        profilePicture: 'https://via.placeholder.com/150'
-    });
+    const [resume, setResume] = useState<File | null>(null);
+    const [skills, setSkills] = useState<string[]>(['JavaScript', 'React']);
+    const [newSkill, setNewSkill] = useState('');
 
-    const handleEdit = () => {
-        setEditing(!editing);
+    const handleResumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setResume(e.target.files[0]);
+        }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setUserData({ ...userData, [name]: value });
+    const handleAddSkill = () => {
+        if (newSkill && !skills.includes(newSkill)) {
+            setSkills([...skills, newSkill]);
+            setNewSkill('');
+        }
     };
 
-    const handleSave = () => {
-        // Save changes (e.g., send to API)
-        setEditing(false);
+    const handleRemoveSkill = (skillToRemove: string) => {
+        setSkills(skills.filter(skill => skill !== skillToRemove));
     };
 
     return (
-        <div className="max-w-lg mx-auto mt-6 bg-primary shadow-md rounded-lg p-6">
-            <h1 className="text-3xl font-bold mb-6 text-center text-primary-foreground">Profile</h1>
-            <div className="text-center mb-6">
-                <img 
-                    src={userData.profilePicture} 
-                    alt="Profile" 
-                    className="w-32 h-32 rounded-full mx-auto mb-2"
-                />
-                <input 
-                    type="file" 
-                    className="hidden" 
-                    id="profilePicture"
-                    name="profilePicture"
-                    onChange={handleChange}
-                />
-                <label 
-                    htmlFor="profilePicture" 
-                    className="text-primary-foreground cursor-pointer"
-                >
-                    Change Profile Picture
-                </label>
-            </div>
-            {editing ? (
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-semibold mb-1 text-primary-foreground">Name</label>
+        <div className='p-6'>
+            <Card className='mb-6'>
+                <CardHeader>
+                    <CardTitle className='text-lg font-bold text-primary flex items-center gap-2'>
+                        <FileText size={24} className='text-primary' />
+                        Profile
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className='mb-6'>
+                        <label className='block text-sm font-bold mb-2 text-primary flex items-center gap-2'>
+                            <FileText size={20} />
+                            Upload Resume
+                        </label>
                         <input
-                            type="text"
-                            name="name"
-                            value={userData.name}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary"
+                            type='file'
+                            id='resume'
+                            accept='.pdf,.doc,.docx'
+                            onChange={handleResumeChange}
+                            className='block w-full text-gray-600 border border-gray-300 rounded p-2'
                         />
+                        {resume && <p className='mt-2 text-gray-600'>Selected file: {resume.name}</p>}
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold mb-1 text-primary">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={userData.email}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary"
-                        />
+                        <label className='block text-sm font-bold mb-2 text-primary flex items-center gap-2'>
+                            <PlusCircle size={20} />
+                            Skills
+                        </label>
+                        <div className='mb-4'>
+                            <Input
+                                type='text'
+                                id='skills'
+                                value={newSkill}
+                                onChange={(e) => setNewSkill(e.target.value)}
+                                placeholder='Enter a new skill'
+                                className='w-full mb-2 border border-gray-300 rounded p-2'
+                            />
+                            <Button onClick={handleAddSkill} className='bg-primary text-primary-foreground flex items-center gap-2'>
+                                <PlusCircle size={16} />
+                                Add Skill
+                            </Button>
+                        </div>
+                        <div>
+                            <ul className='list-disc pl-5 space-y-2'>
+                                {skills.map(skill => (
+                                    <li key={skill} className='flex justify-between items-center'>
+                                        <span>{skill}</span>
+                                        <Button
+                                            onClick={() => handleRemoveSkill(skill)}
+                                            className='text-red-500 hover:bg-red-100 flex items-center gap-2'
+                                        >
+                                            <X size={16} />
+                                            Remove
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                    <div>
-                        <label className="block text-sm font-semibold mb-1 text-gray-700">Phone</label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            value={userData.phone}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold mb-1 text-gray-700">Address</label>
-                        <input
-                            type="text"
-                            name="address"
-                            value={userData.address}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:border-primary"
-                        />
-                    </div>
-                    <div className="flex justify-end space-x-4">
-                        <button 
-                            onClick={handleSave} 
-                            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary-hover"
-                        >
-                            Save
-                        </button>
-                        <button 
-                            onClick={handleEdit} 
-                            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                <div className="space-y-4">
-                    <div>
-                        <p className="text-lg"><strong>Name:</strong> {userData.name}</p>
-                        <p className="text-lg"><strong>Email:</strong> {userData.email}</p>
-                        <p className="text-lg"><strong>Phone:</strong> {userData.phone}</p>
-                        <p className="text-lg"><strong>Address:</strong> {userData.address}</p>
-                    </div>
-                    <div className="flex justify-center">
-                        <button 
-                            onClick={handleEdit} 
-                            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary-hover"
-                        >
-                            Edit Profile
-                        </button>
-                    </div>
-                </div>
-            )}
+                </CardContent>
+            </Card>
         </div>
     );
 };
