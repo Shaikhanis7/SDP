@@ -1,7 +1,4 @@
-// authService.ts
-
-import { axiosInstance } from "./api";
-import jwtDecode from "jwt-decode";
+import jwtDecode from 'jwt-decode';
 
 type JwtPayload = {
     sub: string;
@@ -17,6 +14,7 @@ const getUserEmail = (): string | null => {
     const token = getToken();
     if (token) {
         try {
+            // Using type assertion
             const payload = jwtDecode<JwtPayload>(token);
             return payload.sub;
         } catch (error) {
@@ -31,6 +29,7 @@ const getUserRole = (): string | null => {
     const token = getToken();
     if (token) {
         try {
+            // Using type assertion
             const payload = jwtDecode<JwtPayload>(token);
             return payload.role;
         } catch (error) {
@@ -45,6 +44,7 @@ const isLoggedIn = (): boolean => {
     const token = getToken();
     if (token) {
         try {
+            // Using type assertion
             const payload = jwtDecode<JwtPayload>(token);
             return Date.now() < payload.exp * 1000;
         } catch (error) {

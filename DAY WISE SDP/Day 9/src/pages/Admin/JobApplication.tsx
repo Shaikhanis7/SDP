@@ -1,0 +1,185 @@
+import React, { useState } from 'react';
+import { Search, X, Edit, Trash2 } from 'lucide-react';
+import {
+    Table,
+    TableCaption,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableHead,
+    TableCell,
+} from '../../components/ui/table';
+import { Button } from '../../components/ui/button';
+
+const JobApplication: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [applications, setApplications] = useState([
+        { id: 1, applicant: 'John Doe', position: 'Frontend Developer', status: 'Reviewed' },
+        { id: 2, applicant: 'Jane Smith', position: 'Backend Developer', status: 'Pending' },
+        { id: 3, applicant: 'Alice Johnson', position: 'UX Designer', status: 'Accepted' },
+    ]);
+    const [showModal, setShowModal] = useState(false);
+    const [editApplication, setEditApplication] = useState<any>(null);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleEditApplication = (application: any) => {
+        setEditApplication(application);
+        setShowModal(true);
+    };
+
+    const handleDeleteApplication = (applicationId: number) => {
+        setApplications(applications.filter(app => app.id !== applicationId));
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const updatedApplication = {
+            id: editApplication ? editApplication.id : Date.now(),
+            applicant: formData.get('applicant')?.toString() || '',
+            position: formData.get('position')?.toString() || '',
+            status: formData.get('status')?.toString() || 'Pending',
+        };
+        if (editApplication) {
+            setApplications(applications.map(app => (app.id === editApplication.id ? updatedApplication : app)));
+        }
+        setShowModal(false);
+    };
+
+    const filteredApplications = applications.filter(app =>
+        app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        app.position.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return (
+        <div className='p-6'>
+            <div className='flex items-center justify-between'>
+                <div className='flex items-center gap-2'>
+                    <h1 className='text-2xl font-bold text-primary'>Job Applications</h1>
+                </div>
+            </div>
+            <div className='mt-4 flex justify-between items-center'>
+                <div className='relative w-full'>
+                    <input
+                        type='text'
+                        placeholder='Search applications...'
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        className='pl-10 pr-4 py-2 border border-gray-300 rounded w-full'
+                    />
+                    <Search className='absolute left-2 top-2.5 text-gray-400' size={20} />
+                </div>
+            </div>
+            <div className='mt-4'>
+                <Table>
+                    <TableCaption>A list of job applications.</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Applicant</TableHead>
+                            <TableHead>Position</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {filteredApplications.length > 0 ? (
+                            filteredApplications.map(app => (
+                                <TableRow key={app.id}>
+                                    <TableCell>{app.applicant}</TableCell>
+                                    <TableCell>{app.position}</TableCell>
+                                    <TableCell>{app.status}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Button
+                                            variant='outline'
+                                            className='mr-2'
+                                            onClick={() => handleEditApplication(app)}
+                                        >
+                                            <Edit size={16} className='mr-1' />
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant='outline'
+                                            color='danger'
+                                            onClick={() => handleDeleteApplication(app.id)}
+                                        >
+                                            <Trash2 size={16} className='mr-1' />
+                                            Delete
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={4} className='text-center text-gray-500'>
+                                    No applications found.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+
+            {showModal && (
+                <div className='fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center'>
+                    <div className='bg-white p-6 rounded shadow-lg w-[90%] max-w-md'>
+                        <div className='flex justify-between items-center mb-4'>
+                            <h2 className='text-lg font-bold text-primary'>
+                                {editApplication ? 'Edit Application' : 'Application Details'}
+                            </h2>
+                            <button onClick={() => setShowModal(false)}><X size={20} className="text-primary" /></button>
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className='mb-4'>
+                                <label className='block text-sm font-bold mb-2 text-primary' htmlFor='applicant'>Applicant Name</label>
+                                <input
+                                    type='text'
+                                    id='applicant'
+                                    name='applicant'
+                                    defaultValue={editApplication?.applicant || ''}
+                                    className='w-full px-4 py-2 border rounded'
+                                    required
+                                />
+                            </div>
+                            <div className='mb-4'>
+                                <label className='block text-sm font-bold mb-2 text-primary' htmlFor='position'>Position</label>
+                                <input
+                                    type='text'
+                                    id='position'
+                                    name='position'
+                                    defaultValue={editApplication?.position || ''}
+                                    className='w-full px-4 py-2 border rounded'
+                                    required
+                                />
+                            </div>
+                            <div className='mb-4'>
+                                <label className='block text-sm font-bold mb-2 text-primary' htmlFor='status'>Status</label>
+                                <select
+                                    id='status'
+                                    name='status'
+                                    defaultValue={editApplication?.status || 'Pending'}
+                                    className='w-full px-4 py-2 border rounded'
+                                >
+                                    <option value='Pending'>Pending</option>
+                                    <option value='Reviewed'>Reviewed</option>
+                                    <option value='Accepted'>Accepted</option>
+                                    <option value='Rejected'>Rejected</option>
+                                </select>
+                            </div>
+                            <div className='flex justify-end'>
+                                <button type='submit' className='bg-primary text-primary-foreground px-4 py-2 rounded'>
+                                    {editApplication ? 'Update' : 'Save'} Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default JobApplication;
