@@ -1,0 +1,23 @@
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* src/pages/Shared/Register.css */
+@layer components {
+    .border-gradient {
+      border-image: linear-gradient(45deg, #f3ec78, #af4261);
+      border-image-slice: 1;
+    }
+  
+    .glow-effect {
+      box-shadow: 0 0 5px rgba(0, 150, 255, 0.5);
+      transition: box-shadow 0.3s ease-in-out;
+    }
+  
+    .glow-effect:focus {
+      box-shadow: 0 0 15px rgba(0, 150, 255, 0.7);
+      outline: none;
+    }
+  }
+  
