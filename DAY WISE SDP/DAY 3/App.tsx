@@ -5,9 +5,10 @@ import Home from './pages/Shared/Home'
 
 
 
-import AdminLayout from './layout/AdminLayout'
+
 import HomeLayout from './layout/HomeLayout'
 import Login from './pages/Shared/Login'
+import Register from './pages/Shared/Register'
 
 
 
@@ -21,8 +22,9 @@ const App = () => {
                     <Route element={<HomeLayout />}>
                         <Route path='/' element={<Home />} />
                         <Route path='/login' element={<Login />} />
-                        {/* <Route path='/register' element={<Register />} /> */}             </Route>
-
+                        <Route path='/register' element={<Register />} /> 
+                    </Route>
+                   
                 </Routes>
             </BrowserRouter>
 
