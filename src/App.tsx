@@ -24,6 +24,7 @@ import ServicesPage from './components/services/ServicesPage'
 import NotFound from './pages/Shared/NotFound'
 import Login from './global-Pages/Login'
 import Settings from './pages/Admin/Settings'
+import SignUp from './pages/Shared/SignUp'
 
 
 
