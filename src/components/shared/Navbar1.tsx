@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes, FaBriefcase, FaHome, FaSignInAlt, FaUserPlus, FaCogs } from 'react-icons/fa';
 import { ModeToggle } from '../ui/mode-toggle';
 
-const Navbar = () => {
+const Navbar1 = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -92,4 +92,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar1;

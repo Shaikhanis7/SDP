@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import axios from 'axios';
+import React, { FormEvent, useRef } from "react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
@@ -6,21 +7,10 @@ import { BorderBeam } from "../../components/magicui/border-beam";
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "./Register.css"; 
+import "./Register.css";
+import { SignUp } from "../services/api";
 
-// Mock SignUp function
-const SignUp = async (name: string, email: string, phone: string, address: string, password: string) => {
-  // Replace with actual API call
-  return fetch("/api/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, email, phone, address, password }),
-  });
-};
-
-const Register: React.FC = () => {
+const Register = () => {
   const navigate = useNavigate();
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -29,33 +19,43 @@ const Register: React.FC = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const name = nameRef.current?.value || "";
-    const email = emailRef.current?.value || "";
-    const phone = phoneRef.current?.value || "";
-    const address = addressRef.current?.value || "";
-    const password = passwordRef.current?.value || "";
-    const confirmPassword = confirmPasswordRef.current?.value || "";
-
+  
+    const name = nameRef.current?.value ?? "";
+    const email = emailRef.current?.value ?? "";
+    const phone = phoneRef.current?.value ?? "";
+    const address = addressRef.current?.value ?? "";
+    const password = passwordRef.current?.value ?? "";
+    const confirmPassword = confirmPasswordRef.current?.value ?? "";
+  
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
-
-    const res = await SignUp(name, email, phone, address, password);
-
-    if (res.status === 200) {
+  
+    try {
+      const res = await SignUp(name, email, phone, address, password);
+  
       toast.success("Signup Success");
       setTimeout(() => {
         navigate('/login');
       }, 5000);
-    } else {
-      const errorData = await res.json();
-      toast.error(errorData.message || "Signup failed");
+    } catch (error: any) {
+      // Axios errors have response property with details
+      if (error.response) {
+        const errorMessage = error.response.data?.message || "Signup failed";
+        toast.error(errorMessage);
+      } else {
+        // Handle other errors (network issues, etc.)
+        console.error("Error during signup:", error);
+        toast.error("Signup failed");
+      }
     }
   };
+  
+  
 
   return (
     <section className="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen p-4">
@@ -156,14 +156,14 @@ const Register: React.FC = () => {
                   </div>
                   <div className="mb-4">
                     <Label
-                      htmlFor="confirm-password"
+                      htmlFor="confirmPassword"
                       className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Confirm Password
                     </Label>
                     <Input
                       type="password"
-                      id="confirm-password"
+                      id="confirmPassword"
                       ref={confirmPasswordRef}
                       placeholder="••••••••"
                       className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-400 dark:focus:border-blue-400 transition duration-200 ease-in-out"
@@ -190,11 +190,11 @@ const Register: React.FC = () => {
                     </Button>
                   </div>
 
-                  <p className="text-sm font-light text-gray-500 dark:text-gray-400 mt-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-4 text-center">
                     Already have an account?{" "}
                     <a
                       href="/login"
-                      className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                      className="text-blue-600 hover:underline dark:text-blue-500"
                     >
                       Sign in
                     </a>

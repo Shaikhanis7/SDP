@@ -7,7 +7,7 @@ import Home from './pages/Shared/Home'
 
 import AdminLayout from './layout/AdminLayout'
 import HomeLayout from './layout/HomeLayout'
-// import Login from './pages/Shared/Login'
+import Login from './pages/Shared/Login'
 import Register from './pages/Shared/Register'
 import AdminDashboard from './pages/Admin/AdminDashBoard'
 import JobPostings from './pages/Admin/JobPostings'
@@ -22,9 +22,10 @@ import JobApplication from './pages/Admin/JobApplication'
 import Jobs from './pages/jobs/Jobs'
 import ServicesPage from './components/services/ServicesPage'
 import NotFound from './pages/Shared/NotFound'
-import Login from './global-Pages/Login'
+// import Login from './global-Pages/Login'
 import Settings from './pages/Admin/Settings'
 import SignUp from './pages/Shared/SignUp'
+import AddCompany from './pages/Admin/AddCompany'
 
 
 
@@ -47,7 +48,7 @@ const App = () => {
 
                    <Route element={<AdminLayout />}>
                         <Route path='/admin/dashboard' element={<AdminDashboard />} />
-                        <Route path='/admin/job-postings' element={<JobPostings />} />
+                        <Route path='/admin/job-postings' element={<AddCompany />} />
                         <Route path='/admin/applications' element={<JobApplications />} />
                         <Route path='/admin/users' element={<UserManagement />} />
                         <Route path='/admin/settings' element={<Settings />} />

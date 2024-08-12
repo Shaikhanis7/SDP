@@ -1,10 +1,8 @@
-
-import axios from 'axios';
-
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 const baseURL = 'http://localhost:7777/api';
 
-const axiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
     baseURL,
 });
 
@@ -19,41 +17,31 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-const SignUp = (name: string, email: string, phone: string, address: string, password: string) =>
-    axiosInstance.post('/auth/register', { name, email, phone, address, password });
+// Existing API functions
+const SignUp = (name: string, email: string, phone: string, address: string, password: string): Promise<AxiosResponse> =>
+    axios.post(`${baseURL}/auth/register`, { name, email, phone, address, password });
 
-const SignIn = (email: string, password: string) =>
-    axiosInstance.post('/auth/login', { email, password });
+const WebDatax = (): Promise<AxiosResponse> => axios.get(`${baseURL}/web/sitex`);
 
-const SignOut = () => axiosInstance.post('/auth/logout');
+const UserData = (email: string): Promise<AxiosResponse> => axiosInstance.get(`/users/email/${email}`);
 
+const UpdateUserByID = (id: string, data: object): Promise<AxiosResponse> =>
+    axiosInstance.put(`/users/update/${id}`, data);
 
-const WebData = () => axiosInstance.get('/web/site');
+const DeleteUserByID = (id: string): Promise<AxiosResponse> => axiosInstance.delete(`/users/delete/${id}`);
 
-const UserData = (email: string) => axiosInstance.get(`/users/email/${email}`);
-const UpdateUserByID = (id: string, data: object) => axiosInstance.put(`/users/update/${id}`, data);
-const DeleteUserByID = (id: string) => axiosInstance.delete(`/users/delete/${id}`);
-const getAllUsers = () => axiosInstance.get('/users/all');
+const getAllUsers = (): Promise<AxiosResponse> => axiosInstance.get('/users/all');
 
-const getJobPostings = () => axiosInstance.get('/jobs');  
-const getJobPostingByID = (id: string) => axiosInstance.get(`/jobs/${id}`);
-const createJobPosting = (data: object) => axiosInstance.post('/jobs', data);
-const updateJobPostingByID = (id: string, data: object) => axiosInstance.put(`/jobs/${id}`, data);
-const deleteJobPostingByID = (id: string) => axiosInstance.delete(`/jobs/${id}`);
+const CreateUser = (name: string, email: string, role: string, phone: string, address: string, password: string): Promise<AxiosResponse> =>
+    axiosInstance.post('/user/add', { name, email, phone, role, address, password });
 
-export {
-    axiosInstance,
-    SignUp,
-    SignIn,
-    SignOut,
-    WebData,
-    UserData,
-    UpdateUserByID,
-    DeleteUserByID,
-    getAllUsers,
-    getJobPostings,
-    getJobPostingByID,
-    createJobPosting,
-    updateJobPostingByID,
-    deleteJobPostingByID,
-};
+// New API functions for companies and jobs
+const CreateCompany = (name: string, contactEmail: string, contactPhone: string): Promise<AxiosResponse> =>
+    axiosInstance.post(`${baseURL}/user/companies`, { name, contactEmail, contactPhone });
+
+const GetAllCompanies = (): Promise<AxiosResponse> => axiosInstance.get('/user/companies');
+
+const CreateJob = (jobData: { title: string, description: string, location: string, salary: number, jobType: string, companyId: number }): Promise<AxiosResponse> =>
+    axiosInstance.post(`${baseURL}/user/jobs`, jobData);
+
+export { axiosInstance, SignUp, WebDatax, UserData, UpdateUserByID, getAllUsers, DeleteUserByID, CreateUser, CreateCompany, GetAllCompanies, CreateJob };
