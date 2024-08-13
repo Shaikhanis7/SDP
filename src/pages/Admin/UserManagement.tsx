@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, Edit, Trash2, PlusCircle } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import {
@@ -10,16 +10,34 @@ import {
     TableHead,
     TableCell,
 } from '../../components/ui/table';
+import { getAllUsers, CreateUser, UpdateUserByID, DeleteUserByID } from '../services/api'; // Update with the correct path
 
 const UserManagement: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [users, setUsers] = useState([
-        { id: 1, name: 'Rajesh Kumar', email: 'rajesh@example.com', role: 'Admin' },
-        { id: 2, name: 'Sita Patel', email: 'sita@example.com', role: 'User' },
-        { id: 3, name: 'Amit Sharma', email: 'amit@example.com', role: 'User' },
-    ]);
+    const [users, setUsers] = useState<any[]>([]);
     const [showModal, setShowModal] = useState(false);
     const [editUser, setEditUser] = useState<any>(null);
+
+    // Refs for form inputs
+    const nameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const phoneRef = useRef<HTMLInputElement>(null);
+    const addressRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        // Fetch users when component mounts
+        const fetchUsers = async () => {
+            try {
+                const response = await getAllUsers();
+                setUsers(response.data);
+            } catch (error) {
+                console.error('Failed to fetch users:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value);
@@ -35,26 +53,47 @@ const UserManagement: React.FC = () => {
         setShowModal(true);
     };
 
-    const handleDeleteUser = (userId: number) => {
-        setUsers(users.filter(user => user.id !== userId));
+    const handleDeleteUser = async (userId: number) => {
+        console.log('Deleting user with ID:', userId);
+        try {
+            await DeleteUserByID(userId);
+            setUsers(users.filter(user => user.id !== userId));
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+        }
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const form = e.target as HTMLFormElement;
-        const formData = new FormData(form);
+
         const newUser = {
             id: editUser ? editUser.id : Date.now(),
-            name: formData.get('name')?.toString() || '',
-            email: formData.get('email')?.toString() || '',
-            role: formData.get('role')?.toString() || 'User',
+            name: nameRef.current?.value || '',
+            email: emailRef.current?.value || '',
+            phone: phoneRef.current?.value || '',
+            address: addressRef.current?.value || '',
+            password: passwordRef.current?.value || '',
         };
-        if (editUser) {
-            setUsers(users.map(user => (user.id === editUser.id ? newUser : user)));
-        } else {
-            setUsers([...users, newUser]);
+
+        console.log('Submitting user:', newUser);
+
+        try {
+            if (editUser) {
+                await UpdateUserByID(editUser.id, newUser);
+                setUsers(users.map(user => (user.id === editUser.id ? newUser : user)));
+            } else {
+                await CreateUser(newUser.name, newUser.email, newUser.phone, newUser.address, newUser.password);
+                setUsers([...users, newUser]);
+            }
+        } catch (error) {
+            console.error('Failed to save user:', error);
         }
         setShowModal(false);
+    };
+
+    const handleRowClick = (user: any) => {
+        setEditUser(user);
+        setShowModal(true);
     };
 
     const filteredUsers = users.filter(user =>
@@ -90,17 +129,17 @@ const UserManagement: React.FC = () => {
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Email</TableHead>
-                            <TableHead>Role</TableHead>
+                            <TableHead>Phone</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {filteredUsers.length > 0 ? (
                             filteredUsers.map(user => (
-                                <TableRow key={user.id}>
+                                <TableRow key={user.id} onClick={() => handleRowClick(user)} className='cursor-pointer'>
                                     <TableCell>{user.name}</TableCell>
                                     <TableCell>{user.email}</TableCell>
-                                    <TableCell>{user.role}</TableCell>
+                                    <TableCell>{user.phone}</TableCell>
                                     <TableCell className="text-right">
                                         <Button
                                             variant='outline'
@@ -113,7 +152,10 @@ const UserManagement: React.FC = () => {
                                         <Button
                                             variant='outline'
                                             color='danger'
-                                            onClick={() => handleDeleteUser(user.id)}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevents triggering row click event
+                                                handleDeleteUser(user.id);
+                                            }}
                                         >
                                             <Trash2 size={16} className='mr-1' />
                                             Delete
@@ -143,42 +185,76 @@ const UserManagement: React.FC = () => {
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className='mb-4'>
-                                <label className='block text-sm font-bold mb-2 text-primary-foreground' htmlFor='name'>Name</label>
+                                <label className='block text-sm font-medium text-primary-foreground' htmlFor='name'>
+                                    Name
+                                </label>
                                 <input
                                     type='text'
                                     id='name'
                                     name='name'
+                                    ref={nameRef}
                                     defaultValue={editUser?.name || ''}
-                                    className='w-full px-4 py-2 border rounded'
+                                    className='mt-1 block w-full border border-gray-300 rounded p-2'
                                     required
                                 />
                             </div>
                             <div className='mb-4'>
-                                <label className='block text-sm font-bold mb-2 text-primary-foreground' htmlFor='email'>Email</label>
+                                <label className='block text-sm font-medium text-primary-foreground' htmlFor='email'>
+                                    Email
+                                </label>
                                 <input
                                     type='email'
                                     id='email'
                                     name='email'
+                                    ref={emailRef}
                                     defaultValue={editUser?.email || ''}
-                                    className='w-full px-4 py-2 border rounded'
+                                    className='mt-1 block w-full border border-gray-300 rounded p-2'
                                     required
                                 />
                             </div>
                             <div className='mb-4'>
-                                <label className='block text-sm font-bold mb-2 text-primary-foreground' htmlFor='role'>Role</label>
-                                <select
-                                    id='role'
-                                    name='role'
-                                    defaultValue={editUser?.role || 'User'}
-                                    className='w-full px-4 py-2 border rounded'
-                                >
-                                    <option value='Admin'>Admin</option>
-                                    <option value='User'>User</option>
-                                </select>
+                                <label className='block text-sm font-medium text-primary-foreground' htmlFor='phone'>
+                                    Phone
+                                </label>
+                                <input
+                                    type='text'
+                                    id='phone'
+                                    name='phone'
+                                    ref={phoneRef}
+                                    defaultValue={editUser?.phone || ''}
+                                    className='mt-1 block w-full border border-gray-300 rounded p-2'
+                                />
+                            </div>
+                            <div className='mb-4'>
+                                <label className='block text-sm font-medium text-primary-foreground' htmlFor='address'>
+                                    Address
+                                </label>
+                                <input
+                                    type='text'
+                                    id='address'
+                                    name='address'
+                                    ref={addressRef}
+                                    defaultValue={editUser?.address || ''}
+                                    className='mt-1 block w-full border border-gray-300 rounded p-2'
+                                />
+                            </div>
+                            <div className='mb-4'>
+                                <label className='block text-sm font-medium text-primary-foreground' htmlFor='password'>
+                                    Password
+                                </label>
+                                <input
+                                    type='password'
+                                    id='password'
+                                    name='password'
+                                    ref={passwordRef}
+                                    defaultValue={editUser?.password || ''}
+                                    className='mt-1 block w-full border border-gray-300 rounded p-2'
+                                    required
+                                />
                             </div>
                             <div className='flex justify-end'>
-                                <Button type='submit' className='text-primary bg-primary-foreground px-4 py-2 rounded'>
-                                    {editUser ? 'Update' : 'Add'} User
+                                <Button type='submit' className='bg-primary text-primary-foreground'>
+                                    {editUser ? 'Update User' : 'Add User'}
                                 </Button>
                             </div>
                         </form>
